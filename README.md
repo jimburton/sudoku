@@ -2,8 +2,16 @@
 
 Adapted with permission from http://www.cse.chalmers.se/edu/course/TDA555.
 
-In this Lab Assignment, you will design a Haskell program that will be
+In this assignment you will design a Haskell program that will be
 able to solve *Sudoku*, the well-known logical puzzle from Japan.
+
+First, download a copy of this repository. You will do your work in
+the file `src/Sudoku.hs` and the repository also includes other useful
+material, such as example puzzles in the `puzzles/` directory. 
+
+```
+$ git clone https://github.com/jimburton/sudoku.git
+```
 
 ## Hints
 
@@ -23,16 +31,16 @@ are mentioned in the hints.
 
 ## Preparation
 
-Before starting on this lab, make sure that you have understood the
+Before starting on this assignment make sure that you have understood the
 material from the lectures in week 1 to 4. It is not necessary to use
 higher-order functions to solve the lab, but there are some tasks in
 which certain higher-order functions may come in handy.
 
 You should also be familiar with the `Maybe` type.
 
-Download the file
-[Sudoku.hs](https://github.com/UniversityOfBrightonComputing/CI285/blob/master/staff/labs/sudoku/src/Sudoku.hs),
-and add your solutions to the exercises to that file.
+Download the file [Sudoku.hs](src/Sudoku.hs), and add your solutions
+to the exercises to that file. Submit the file `Sudoku.hs` on
+studentcentral.
 
 ### Some general hints:
 
@@ -147,12 +155,8 @@ And here is the solution:
 +---+---+---+---+---+---+---+---+---+
 ```
 
-In this lab assignment, you will write a Haskell program that can read
-in a Sudoku puzzle and solve it.
-
-## More Information
-
-If you want to read more about Sudoku, here are a few links:
+You will write a Haskell program that can read in a Sudoku puzzle and
+solve it. If you want to read more about Sudoku, here are a few links:
 
 + [The Daily Sudoku](http://www.dailysudoku.com/sudoku/index.shtml) has examples and explanations.
 + [The Wikipedia page about Sudoku](http://en.wikipedia.org/wiki/Sudoku).
@@ -182,7 +186,7 @@ rows from the puzzle, we say:
   rows :: Puzzle -> [[Maybe Int]]
   rows (Puzzle rs) = rs
 ```
-
+ 
 For example, the above Sudoku puzzle has the following representation in Haskell:
 
 ```haskell
@@ -201,12 +205,12 @@ For example, the above Sudoku puzzle has the following representation in Haskell
       ]
 ```
 
-Now, a number of assignments follows, which will lead you step-by-step
+Now, a number of assignments follow, leading you step-by-step
 towards an implementation of a Sudoku-solver.
 
-For most of the problems that follow, one or more `QuickCheck` tests
-are defined which will help you to check your work. You can run a
-test, e.g. `prop_allBlank`, from a `ghci` session as follows:
+`QuickCheck` tests are defined in `Sudoku.hs` to help you to check
+your work. You can run a test, e.g. `prop_allBlank`, from a `ghci`
+session as follows:
 
 ```
 Sudoku> quickCheck prop_allBlank
@@ -244,6 +248,8 @@ Implement a function
 
 that checks if all such extra conditions are met by the given puzzle.
 
+**Test**: `prop_isSudoku`.
+
 #### Examples:
 
 ```
@@ -259,8 +265,7 @@ that checks if all such extra conditions are met by the given puzzle.
 
 **1.3** Our job is to solve puzzles. So, it would be handy to know when a
 puzzle is solved or not. We say that a puzzle is solved if there are
-no blank cells left to be filled in anymore. Implement the following
-function:
+no blank cells left. Implement the following function:
 
 ```haskell
   isSolved :: Puzzle -> Bool
@@ -271,10 +276,11 @@ will do this later. This means that any puzzle without blanks (even
 puzzles with the same digit appearing twice in a row) is considered
 solved by this function.  
 
+**Test**: `prop_isSolved`
+
 **Hints**
 
-To implement the above, you could use list comprehensions. Also, the following
-standard Haskell functions might come in handy:
+The following standard Haskell functions might come in handy:
 
 ```haskell
 replicate :: Int -> a -> [a]
@@ -283,11 +289,6 @@ and       :: [Bool] -> Bool
 ```
 
 See also the general hints above.
-
-To help you get started, ahere is a file that you can use:
-
-Sudoku.hs, with some definitions that help you get going with Assignments A, B and C.
- 
 
 ### Reading and Printing Puzzles
 
@@ -312,7 +313,7 @@ this assignment. It actually represents the example above.
 
 There are 9 lines of text in this representation, each corresponding
 to a row. Each line contains 9 characters. A digit 1 – 9 represents a
-filled cell, and a period (.) represents a blank cell.
+filled cell, and a full stop (.) represents a blank cell.
 
 ## Part 2
 
@@ -346,6 +347,7 @@ Example:
   ..53.89..
   .83....6.
   ..769..43
+
 ```
 **2.2** Implement a function:
 
@@ -357,6 +359,8 @@ that, given a filename, creates instructions that read the puzzle from
 the file, and deliver it as the result of the instructions. You may
 decide yourself what to do when the file does not contain a
 representation of a puzzle.  
+
+**Test**: `prop_readPuzzle`.
 
 Examples:
 
@@ -373,7 +377,7 @@ Examples:
   .83....6.
   ..769..43
   Sudoku> readPuzzle "Sudoku.hs"
-  Exception: Not a Sudoku!
+  Exception: Not a Sudoku puzzle!
 ```
 
 (Note: In the above example, we make use of the fact that commands in
@@ -408,13 +412,11 @@ readFile   :: FilePath -> IO String
 lines      :: String -> [String]
 ```
 
-Here are some example Sudoku files that you can download and use:
-
-example.sud, containing the above example.  sudokus.zip, a ZIPped
-collection of Sudoku puzzles, both easy and hard ones. The easy ones
-should all be solvable by your final program within minutes; the hard
-ones will probably take a very long time (unless you do the extra
-assignments and optimise your solver).
+This repository contains some example Sudoku files that you can
+download and use in the `puzzles/` directory. There are easy and hard
+examples. The easy ones should all be solvable by your final program
+within minutes; the hard ones will probably take a very long time
+(unless you do the extra assignments and optimise your solver).
  
 
 #### Rows, Columns and Blocks
@@ -448,7 +450,9 @@ blocks violate those constraints.
 ```
 
 that, given a block, checks if that block does not contain the same
-digit twice.  
+digit twice. 
+
+**Test*: `prop_isValidBlock`. 
 
 Examples:
 
@@ -482,11 +486,13 @@ not contain the same digit twice.
 Examples:
 
 ```
-  Sudoku> isValid allBlankPuzzle
+  Sudoku> isValidPuzzle allBlankPuzzle
   True
   Sudoku> do sud <- readPuzzle "example.sud"; print (isValid sud)
   True
 ```
+
+**Test**: `prop_isValid`.
 
 **Hints**
 
@@ -517,7 +523,7 @@ coordinate that identifies a cell in the puzzle matrix. Here is a way of
 modelling coordinates:
 
 ```haskell
-  type Pos = (Int,Int)
+  data Pos = Pos (Int,Int)
 ```
 
 We use positions as indicating first the row and then the column. It
@@ -545,8 +551,7 @@ Examples:
   (0,2)
 ```
 
-Also write a property that states that the cell at the blank position
-is actually blank.
+**Test**: `prop_blank`
 
 **4.2** Implement a function:
 
@@ -566,7 +571,7 @@ Examples:
   ["bepa","qq","rrr"]
 ```
 
-**Test**: `prop_replaceoplength`.
+**Test**: `prop_listReplaceOp`.
 
 **4.3** Implement a function:
 
@@ -609,13 +614,6 @@ with their corresponding index. Example:
 
 This, in combination with list comprehensions, should be very useful
 for this assignment.
-
-When testing a property that is polymorphic (meaning that it has type
-variables in its type), you need to add a type signature that picks an
-arbitrary type. For example, when testing properties for the function
-`(!!=)`, which works for lists of any type, you have to fix the type
-when testing, for example lists of Integers. Do this by adding a type
-signature to your properties.
 
 Here are some more useful functions:
 
@@ -734,6 +732,8 @@ using the above idea.
 Unless you’re up for a challenge you are recommended to use the
 skeleton code from above and just fill in the ... parts.
 
+**Test**: `prop_solve`.
+
 
 Examples:
 ```
@@ -771,6 +771,8 @@ library `Data.Maybe`.)
 that produces instructions for reading the puzzle from the given file,
 solving it, and printing the answer.
 
+**Test**: `prop_readAndSolve`.
+
 Examples:
 ```
   Sudoku> readAndSolve "../puzzles/example.sud"
@@ -806,18 +808,10 @@ Examples:
   Sudoku> fromJust (solve allBlankPuzzle) `isSolutionOf` example
   False
 ```
-**5.4** Define a property:
-```haskell
-  prop_SolveSound :: Puzzle -> Property
-```
-
-that says that the function `solve` is sound. Soundness means that every
-supposed solution produced by `solve` actually is a valid solution of
-the original problem.  
 
 **Hints**
 
-All the work we did in the assignments A – E should be used in order
+All the work we did in the assignments 1 to 4 should be used in order
 to implement the function solve.
 
 To implement the third, recursive, case of `solve`, you can use a list
@@ -860,8 +854,9 @@ We have provided an example of an impossible puzzle in the file
 
 ## Extra Assignments
 
-You can choose freely whether to do 0, 1 or more of these. These are
-not obligatory, but you will learn more if you do them.
+**Assignments X.1 to X.3 are not assessed.** You can choose freely
+whether to do 0, 1 or more of these. So, these are not obligatory, but
+you will learn more if you do them.
 
 There are no perfect, pre-defined answers here, but try to show your
 thoughts and understanding in your answers.
@@ -909,7 +904,7 @@ hard puzzles now?
 
 Do not forget to add appropriate properties that test your functions.
 
-**Y.** The solving method we have used in this lab assignment is very
+**X.2** The solving method we have used in this lab assignment is very
 basic, and in some sense naive. The best known methods to solve
 problems like Sudoku is to also include the notion of
 propagation. This is the way most humans actually solve a puzzle.
@@ -951,7 +946,7 @@ For other, more powerful propagation, you can for example read the following web
 sudoku.com, and click on "how to solve". Or come up with your own propagation rules.
 Do not forget to add appropriate properties that test your functions.
 
-**X.2** Write a function that produces interesting Sudoku puzzles. For
+**X.3** Write a function that produces interesting Sudoku puzzles. For
 example, one could have a function
 
 ```haskell
@@ -973,40 +968,3 @@ should of course make use of the functions you already have.
 
 Do not forget to add appropriate properties that test your functions.
 
-**X.3** Generalize the puzzles that are dealt with in this assignment to
-other dimensions, for example 4x4 puzzles, or 4x3 puzzles. Do all
-dimensions make sense? Make sure your solution works in general, for
-all possible dimensions that make sense.  For inspiration, look here:
-[Monster Sudokus](http://www.knightfeatures.com/KFWeb/content/features/kffeatures/puzzlesandcrosswords/KF/Sudoku/Sudoku_Monster/sudoku_monster.html) or here: [xkcd comics](http://xkcd.com/c74.html) :-)
-
-Do not forget to add appropriate properties that test your functions.
-
-**X.4** We have stated the soundness of the solve function as a property;
-every produced solution should be a real solution. The dual of
-soundness is completeness. Completeness says that whenever there is a
-solution, the solve function should also produce a
-solution. (Equivalently, if the solve function says that there is no
-solution, then there really is no solution.)
-
-If we define the following helper datatype:
-```haskell
-  data SolvablePuzzle = Solvable Puzzle
-```
-
-Then, implement a property
-```haskell
-  prop_SolveComplete :: SolvablePuzzle -> Bool
-  prop_SolveComplete (Solvable s) = ...
-```
-that states that, for any solvale puzzle, solve produces an answer.
-Now, make the type `SolvablePuzzle` an instance of `Arbitrary`:
-```haskell
-  instance Arbitrary SolvablePuzzle where
-    arbitrary = ...
-```
-
-Here, you need to think about how to generate arbitrary puzzles that
-are guaranteed to be solvable.
-
-One idea is to start with an arbitrary solved puzzle, and randomly
-blank out some of the digits. Implement this.
