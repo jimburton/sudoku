@@ -3,7 +3,7 @@
 Adapted with permission from http://www.cse.chalmers.se/edu/course/TDA555.
 
 In this Lab Assignment, you will design a Haskell program that will be
-able to solve Sudoku, the well-known logical puzzle from Japan.
+able to solve *Sudoku*, the well-known logical puzzle from Japan.
 
 ## Hints
 
@@ -204,13 +204,21 @@ For example, the above Sudoku puzzle has the following representation in Haskell
 Now, a number of assignments follows, which will lead you step-by-step
 towards an implementation of a Sudoku-solver.
 
+For most of the problems that follow, one or more `QuickCheck` tests
+are defined which will help you to check your work. You can run a
+test, e.g. `prop_allBlank`, from a `ghci` session as follows:
+
+```
+Sudoku> quickCheck prop_allBlank
+```
+
 ## Some Basic Sudoku Functions
 
 To warm up, we start with a number of basic functions on Sudukos.
 
-### Assignment A
+### Part 1
 
-**A1.** Implement a function
+**1.1** Implement a function
 
 ```haskell  
   allBlankPuzzle :: Puzzle
@@ -221,8 +229,8 @@ that no digits are present).  Do not use copy-and-paste programming
 here. Your definition does not need to be longer than a few short
 lines.
 
-**A2.** The `Puzzle` type we have defined allows for more things than
-Sudokus. For example, there is nothing in the type definition that
+**1.2** The `Puzzle` type we have defined allows for more things than
+Sudoku puzzles. For example, there is nothing in the type definition that
 says that a puzzle has 9 rows and 9 columns, or that digits need to
 lie between 1 and 9. 
 
@@ -247,7 +255,7 @@ that checks if all such extra conditions are met by the given puzzle.
   False
 ```
 
-**A3.** Our job is to solve puzzles. So, it would be handy to know when a
+**1.3** Our job is to solve puzzles. So, it would be handy to know when a
 puzzle is solved or not. We say that a puzzle is solved if there are
 no blank cells left to be filled in anymore. Implement the following
 function:
@@ -304,9 +312,9 @@ There are 9 lines of text in this representation, each corresponding
 to a row. Each line contains 9 characters. A digit 1 – 9 represents a
 filled cell, and a period (.) represents a blank cell.
 
-## Assignment B
+## Part 2
 
-**B1.** Implement a function:
+**2.1** Implement a function:
 
 ```haskell  
   printPuzzle :: Puzzle -> IO ()
@@ -337,7 +345,7 @@ Example:
   .83....6.
   ..769..43
 ```
-**B2.** Implement a function:
+**2.2** Implement a function:
 
 ```haskell
   readPuzzle :: FilePath -> IO Puzzle
@@ -400,81 +408,12 @@ lines      :: String -> [String]
 
 Here are some example Sudoku files that you can download and use:
 
-example.sud, containing the above example.
-sudokus.zip, a ZIPped collection of sudokus, both easy and hard ones. The easy ones should all be solvable by your final program within minutes; the hard ones will probably take a very long time (unless you do the extra assignments *X* and/or *Y*).
+example.sud, containing the above example.  sudokus.zip, a ZIPped
+collection of Sudoku puzzles, both easy and hard ones. The easy ones
+should all be solvable by your final program within minutes; the hard
+ones will probably take a very long time (unless you do the extra
+assignments *X* and/or *Y*).
  
-
-### Generating Puzzles as Test Data
-
-Finally, we need to be able to test properties about the functions
-related to our Sudokus. In order to do so, QuickCheck needs to be able
-to generate arbitrary puzzles.
-
-Let us split this problem into a number of smaller problems. First, we
-need to know how to generate arbitrary cell values (of type Maybe
-Int). Then, we need to know how to generate 81 such cells, and compose
-them all into a Sudoku.
-
-## Assignment C
-
-**C1.** Implement a function:
-
-```haskell
-  cell :: Gen (Maybe Int)
-```
-that, contains instructions for generating a Sudoku cell. You have to
-think about the following:
-
-Cells either contain a digit between 1 and 9 (for example Just 3) or
-are empty (`Nothing`),
-
-We would like our generated puzzles to resemble realistic Sudoku
-puzzles. Therefore, the distribution should be around 10% probability
-non-empty cells vs. 90% probability for empty cells. (This is not
-something strict; you can play around with this if you like.)
-
-Example:
-
-```
-  Sudoku> sample cell
-  Just 3
-  Nothing
-  Nothing
-  Just 7
-  Nothing
-```
-
-**C2.** Make `Puzzle` an instance of the QuickCheck class `Arbitrary`.
-
-```haskell  
-  instance Arbitrary Puzzle where
-    ...
-```
-We have already done this for you in the file Sudoku.hs.
-
-C3. Define a property
-```haskell
-  prop_Sudoku :: Puzzle -> Bool
-```
-
-that expresses that each generated puzzle actually is a Sudoku puzzle
-according to Assignment A2. Also use QuickCheck to check that the
-property actually holds for all generated puzzles.
-
-**Hints**
-
-Here are some functions that might come in handy:
-
-```haskell
-sample    :: Gen a -> IO ()
-choose    :: Random a => (a,a) -> Gen a
-frequency :: [(Int,Gen a)] -> Gen a
-sequence  :: [Gen a] -> Gen [a]
-```
-
-You might want to take a look at the lecture notes and example code on
-test data generation.
-
 
 #### Rows, Columns and Blocks
 
@@ -498,9 +437,9 @@ We are going to define a function that checks if a puzzle is not
 violating any of the above constraints, by checking that none of the
 blocks violate those constraints.
 
-## Assignment D
+## Assignment 3
 
-**D1.** Implement a function:
+**3.1** Implement a function:
 
 ```haskell
   isValidBlock :: Block -> Bool
@@ -518,7 +457,7 @@ Examples:
   False
 ```
 
-**D2.** Implement a function:
+**3.2** Implement a function:
 ```haskell
   blocks :: Puzzle -> [Block]
 ```
@@ -531,7 +470,7 @@ that, given a puzzle, creates a list of all blocks of that puzzle. This means:
 Also add a property that states that, for each puzzle, there are 3*9
 blocks, and each block has exactly 9 cells.
 
-**D3.** Now, implement a function:
+**3.3** Now, implement a function:
 
 ```haskell
   isValidPuzzle :: Sudoku -> Bool
@@ -589,9 +528,9 @@ the position that indicates the upper left corner is (0,0), and the
 position indicating the lower right corner is (8,8). And, for example,
 the position (3,5) denotes the 6th cell in the 4th row.
 
-## Assignment E
+## Part 4
 
-**E1.** Implement a function:
+**4.1** Implement a function:
 ```haskell
   blank :: Puzzle -> Pos
 ```
@@ -611,7 +550,7 @@ Examples:
 Also write a property that states that the cell at the blank position
 is actually blank.
 
-**E2.** Implement a function:
+**4.2** Implement a function:
 
 ```haskell
   (!!=) :: [a] -> (Int,a) -> [a]
@@ -632,7 +571,7 @@ Examples:
 Also write a property or properties that states the expected properties of
 this function. Think about what can go wrong.
 
-**E3.** Implement a function:
+**4.3** Implement a function:
 
 ```haskell
   update :: Sudoku -> Pos -> Maybe Int -> Puzzle
@@ -787,9 +726,9 @@ the base cases sooner or later, because in every step we take away one
 blank cell. Taking away a blank cell means making progress towards a
 solution or a conflict.
 
-## Assignment F
+## Part 5
 
-**F1.** Implement a function:
+**5.1** Implement a function:
 
 ```haskell
   solve :: Puzzle -> Maybe Puzzle
@@ -828,7 +767,7 @@ Examples:
 (In the above examples, we use the standard function `fromJust` from the
 library `Data.Maybe`.)
 
-**F2.** For your own convenience, define a function:
+**5.2** For your own convenience, define a function:
 ```haskell
   readAndSolve :: FilePath -> IO ()
 ```
@@ -852,7 +791,7 @@ Examples:
   (no solution)
 ```
 
-**F3.** Implement a function:
+**5.3** Implement a function:
 ```haskell
   isSolutionOf :: Puzzle -> Puzzle -> Bool
 ```
@@ -871,7 +810,7 @@ Examples:
   Sudoku> fromJust (solve allBlankPuzzle) `isSolutionOf` example
   False
 ```
-**F4.** Define a property:
+**5.4** Define a property:
 ```haskell
   prop_SolveSound :: Puzzle -> Property
 ```
@@ -931,7 +870,7 @@ not obligatory, but you will learn more if you do them.
 There are no perfect, pre-defined answers here, but try to show your
 thoughts and understanding in your answers.
 
-**X.** The solving method we have used in this lab assignment is very
+**X.1** The solving method we have used in this lab assignment is very
 basic, and in some sense naive. One way to boost performance is to
 look closer at the function blank. Perhaps if we picked the blank in a
 smarter way, the solve function would go faster?  One idea is to
@@ -1016,7 +955,7 @@ For other, more powerful propagation, you can for example read the following web
 sudoku.com, and click on "how to solve". Or come up with your own propagation rules.
 Do not forget to add appropriate properties that test your functions.
 
-**Z.** Write a function that produces interesting Sudoku puzzles. For
+**X.2** Write a function that produces interesting Sudoku puzzles. For
 example, one could have a function
 
 ```haskell
@@ -1038,7 +977,7 @@ should of course make use of the functions you already have.
 
 Do not forget to add appropriate properties that test your functions.
 
-**P.** Generalize the puzzles that are dealt with in this assignment to
+**X.3** Generalize the puzzles that are dealt with in this assignment to
 other dimensions, for example 4x4 puzzles, or 4x3 puzzles. Do all
 dimensions make sense? Make sure your solution works in general, for
 all possible dimensions that make sense.  For inspiration, look here:
@@ -1046,7 +985,7 @@ all possible dimensions that make sense.  For inspiration, look here:
 
 Do not forget to add appropriate properties that test your functions.
 
-**Q.** We have stated the soundness of the solve function as a property;
+**X.4** We have stated the soundness of the solve function as a property;
 every produced solution should be a real solution. The dual of
 soundness is completeness. Completeness says that whenever there is a
 solution, the solve function should also produce a
