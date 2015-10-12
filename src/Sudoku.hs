@@ -80,15 +80,28 @@ readPuzzle :: FilePath -> IO Puzzle
 readPuzzle f = undefined
 
 -------------------------------------------------------------------------
+-- QuickCheck definitions and tests
 
--- cell generates an arbitrary cell in a Puzzle
+{-| cell generates an arbitrary cell in a Puzzle with
+    a 1 in 10 chance of being non-empty. |-}
 cell :: Gen (Maybe Int)
-cell = undefined
+cell = frequency [ (9, return Nothing)
+                 , (1, do n <- choose(1,9) ; return (Just n))]
 
 -- an instance for generating Arbitrary Puzzles
 instance Arbitrary Puzzle where
   arbitrary =
     do rows <- sequence [ sequence [ cell | j <- [1..9] ] | i <- [1..9] ]
        return (Puzzle rows)
+
+
+prop_blocks :: Puzzle -> Bool
+prop_blocks s = ((length bl) == 3*9) && 
+                and [(length b) == 9 | b <- bl] where
+                    bl = blocks s
+
+-- (!!=): The length should be the same after replacing an element
+prop_replaceoplength :: [a] -> (Int, a) -> Bool
+prop_replaceoplength s (i,x) = length s == length (s !!= (i, x))
 
 -------------------------------------------------------------------------
