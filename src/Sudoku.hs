@@ -94,6 +94,12 @@ instance Arbitrary Puzzle where
     do rows <- sequence [ sequence [ cell | j <- [1..9] ] | i <- [1..9] ]
        return (Puzzle rows)
 
+prop_allBlank :: Bool
+prop_allBlank = let rs = rows allBlankPuzzle
+                in
+                 length rs == 9
+                 && and (map ((==9) . length) rs)
+                 && and ((concatMap (map isNothing)) rs)
 
 prop_blocks :: Puzzle -> Bool
 prop_blocks s = ((length bl) == 3*9) && 

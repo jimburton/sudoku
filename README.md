@@ -229,6 +229,8 @@ that no digits are present).  Do not use copy-and-paste programming
 here. Your definition does not need to be longer than a few short
 lines.
 
+**Test**: `prop_allBlank`.
+
 **1.2** The `Puzzle` type we have defined allows for more things than
 Sudoku puzzles. For example, there is nothing in the type definition that
 says that a puzzle has 9 rows and 9 columns, or that digits need to
