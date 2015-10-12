@@ -414,7 +414,7 @@ example.sud, containing the above example.  sudokus.zip, a ZIPped
 collection of Sudoku puzzles, both easy and hard ones. The easy ones
 should all be solvable by your final program within minutes; the hard
 ones will probably take a very long time (unless you do the extra
-assignments *X* and/or *Y*).
+assignments and optimise your solver).
  
 
 #### Rows, Columns and Blocks
@@ -439,7 +439,7 @@ We are going to define a function that checks if a puzzle is not
 violating any of the above constraints, by checking that none of the
 blocks violate those constraints.
 
-## Assignment 3
+## Part 3
 
 **3.1** Implement a function:
 
@@ -469,8 +469,7 @@ that, given a puzzle, creates a list of all blocks of that puzzle. This means:
 + 9 columns,
 + 9 3x3 blocks.
 
-Also add a property that states that, for each puzzle, there are 3*9
-blocks, and each block has exactly 9 cells.
+**Test**: `prop_blocks`.
 
 **3.3** Now, implement a function:
 
@@ -502,9 +501,6 @@ drop      :: Int -> [a] -> [a]
 
 Note that some of the above functions only appear when you import
 `Data.List`. See also the general hints above.
-
-You might want to take a look at the exercises and answers on lists
-and list comprehensions.
 
 ### Positions and Finding Blanks
 
@@ -570,8 +566,7 @@ Examples:
   ["bepa","qq","rrr"]
 ```
 
-Also write a property or properties that states the expected properties of
-this function. Think about what can go wrong.
+**Test**: `prop_replaceoplength`.
 
 **4.3** Implement a function:
 
@@ -596,8 +591,7 @@ Example:
   .........
 ```
 
-Also write a property that checks that the updated position really has
-received the new value.
+**Test**: `prop_update`.
 
 **Hints**
 
@@ -844,9 +838,9 @@ You can test on fewer examples (using the QuickCheck function
 
 And then write `fewerCheck prop_SolveSound` when you want to QuickCheck
 the property.  You can also generate puzzles with a different
-probability distribution. Try increasing the amount of digits in an
-arbitrary puzzle by fiddling with the frequencies in the cell function
-from Assignment C1 and see what happens.
+probability distribution. Try varying the amount of digits in an
+arbitrary puzzle by fiddling with the frequencies in the `cell` function
+and see what happens.
 
 You can compile the code, by using `ghc` instead of `ghci`.
 

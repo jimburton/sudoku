@@ -25,6 +25,34 @@ type Pos = (Int, Int)
 rows :: Puzzle -> [[Maybe Int]]
 rows = undefined
 
+example :: Puzzle
+example =
+    Puzzle
+      [ [Just 3, Just 6, Just 5,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Just 5,Just 5,Nothing, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Nothing,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Just 5,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Just 5,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Just 5,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Just 5,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Just 5,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      , [Just 3, Just 6, Just 5,Just 5,Just 7, Just 1, Just 2, Just 5,Just 5]
+      ]
+
+example2 :: Puzzle
+example2 =
+    Puzzle
+      [ [Just 3, Just 6, Nothing,Nothing,Just 7, Just 1, Just 2, Nothing,Nothing]
+      , [Nothing,Just 5, Nothing,Nothing,Nothing,Nothing,Just 1, Just 8, Nothing]
+      , [Nothing,Nothing,Just 9, Just 2, Nothing,Just 4, Just 7, Nothing,Nothing]
+      , [Nothing,Nothing,Nothing,Nothing,Just 1, Just 3, Nothing,Just 2, Just 8]
+      , [Just 4, Nothing,Nothing,Just 5, Nothing,Just 2, Nothing,Nothing,Just 9]
+      , [Just 2, Just 7, Nothing,Just 4, Just 6, Nothing,Nothing,Nothing,Nothing]
+      , [Nothing,Nothing,Just 5, Just 3, Nothing,Just 8, Just 9, Nothing,Nothing]
+      , [Nothing,Just 8, Just 3, Nothing,Nothing,Nothing,Nothing,Just 6, Nothing]
+      , [Nothing,Nothing,Just 7, Just 6, Just 9, Nothing,Nothing,Just 4, Just 3]
+      ]
+
 {-| A Sudoku puzzle with just blanks. |-}
 allBlankPuzzle :: Puzzle
 allBlankPuzzle = undefined
@@ -79,6 +107,9 @@ if `f' did not contain a puzzle. |-}
 readPuzzle :: FilePath -> IO Puzzle
 readPuzzle f = undefined
 
+{-| Returns true is the first puzzle is a solution of the first. |-}
+isSolutionOf :: Puzzle -> Puzzle -> Bool
+isSolutionOf s t = undefined
 -------------------------------------------------------------------------
 -- QuickCheck definitions and tests
 
@@ -105,6 +136,17 @@ prop_blocks :: Puzzle -> Bool
 prop_blocks s = ((length bl) == 3*9) && 
                 and [(length b) == 9 | b <- bl] where
                     bl = blocks s
+
+                    
+-- Note: run with fewerCheck if you
+-- do not like to wait...
+prop_solveSound :: Puzzle -> Bool
+prop_solveSound s 
+    | solution == Nothing = True
+    | otherwise           = isSolutionOf (fromJust solution) s where
+                              solution = solve s
+
+fewerCheck prop = quickCheckWith (stdArgs{ maxSuccess = 30 })  prop
 
 -- (!!=): The length should be the same after replacing an element
 prop_replaceoplength :: [a] -> (Int, a) -> Bool
