@@ -243,23 +243,23 @@ lie between 1 and 9.
 Implement a function
 
 ```haskell
-  isSudoku :: Sudoku -> Bool
+  isPuzzle :: Sudoku -> Bool
 ```
 
 that checks if all such extra conditions are met by the given puzzle.
 
-**Test**: `prop_isSudoku`.
+**Test**: `prop_isPuzzle` and `prop_isNotPuzzle`.
 
 #### Examples:
 
 ```
-  Sudoku> isValidPuzzle (Puzzle [])
+  Sudoku> isPuzzle (Puzzle [])
   False
-  Sudoku> isValidPuzzle allBlankPuzzle
+  Sudoku> isPuzzle allBlankPuzzle
   True
-  Sudoku> isValidPuzzle example
+  Sudoku> isPuzzle example
   True
-  Sudoku> isValidPuzzle (Puzzle (tail (rows example)))
+  Sudoku> isPuzzle (Puzzle (tail (rows example)))
   False
 ```
 
@@ -275,8 +275,6 @@ Note that we do not check here if the puzzle is a valid solution; we
 will do this later. This means that any puzzle without blanks (even
 puzzles with the same digit appearing twice in a row) is considered
 solved by this function.  
-
-**Test**: `prop_isSolved`
 
 **Hints**
 
@@ -359,8 +357,6 @@ that, given a filename, creates instructions that read the puzzle from
 the file, and deliver it as the result of the instructions. You may
 decide yourself what to do when the file does not contain a
 representation of a puzzle.  
-
-**Test**: `prop_readPuzzle`.
 
 Examples:
 
@@ -452,8 +448,6 @@ blocks violate those constraints.
 that, given a block, checks if that block does not contain the same
 digit twice. 
 
-**Test*: `prop_isValidBlock`. 
-
 Examples:
 
 ```
@@ -492,7 +486,7 @@ Examples:
   True
 ```
 
-**Test**: `prop_isValid`.
+**Test**: `prop_isValidPuzzle`.
 
 **Hints**
 
@@ -770,8 +764,6 @@ library `Data.Maybe`.)
 
 that produces instructions for reading the puzzle from the given file,
 solving it, and printing the answer.
-
-**Test**: `prop_readAndSolve`.
 
 Examples:
 ```
