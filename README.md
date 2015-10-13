@@ -38,9 +38,8 @@ which certain higher-order functions may come in handy.
 
 You should also be familiar with the `Maybe` type.
 
-Download the file [Sudoku.hs](src/Sudoku.hs), and add your solutions
-to the exercises to that file. Submit the file `Sudoku.hs` on
-studentcentral.
+Submit the single file `Sudoku.hs` (not a copy of the whole
+repository) on studentcentral before the deadline.
 
 ### Some general hints:
 
