@@ -217,7 +217,7 @@ Sudoku> quickCheck prop_allBlank
 
 ## Some Basic Sudoku Functions
 
-To warm up, we start with a number of basic functions on Sudukos.
+To warm up, we start with a number of basic functions on Suduko puzzles.
 
 ### Part 1
 
