@@ -28,7 +28,7 @@ rows (Puzzle rs) = rs
 
 example :: Puzzle
   example =
-    Sudoku
+    Puzzle
       [ [Just 3, Just 6, Nothing,Nothing,Just 7, Just 1, Just 2, Nothing,Nothing]
       , [Nothing,Just 5, Nothing,Nothing,Nothing,Nothing,Just 1, Just 8, Nothing]
       , [Nothing,Nothing,Just 9, Just 2, Nothing,Just 4, Just 7, Nothing,Nothing]
