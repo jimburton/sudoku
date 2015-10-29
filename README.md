@@ -191,7 +191,7 @@ For example, the above Sudoku puzzle has the following representation in Haskell
 ```haskell
   example :: Puzzle
   example =
-    Sudoku
+    Puzzle
       [ [Just 3, Just 6, Nothing,Nothing,Just 7, Just 1, Just 2, Nothing,Nothing]
       , [Nothing,Just 5, Nothing,Nothing,Nothing,Nothing,Just 1, Just 8, Nothing]
       , [Nothing,Nothing,Just 9, Just 2, Nothing,Just 4, Just 7, Nothing,Nothing]
@@ -242,7 +242,7 @@ lie between 1 and 9.
 Implement a function
 
 ```haskell
-  isPuzzle :: Sudoku -> Bool
+  isPuzzle :: Puzzle -> Bool
 ```
 
 that checks if all such extra conditions are met by the given puzzle.
@@ -471,7 +471,7 @@ that, given a puzzle, creates a list of all blocks of that puzzle. This means:
 **3.3** Now, implement a function:
 
 ```haskell
-  isValidPuzzle :: Sudoku -> Bool
+  isValidPuzzle :: Puzzle -> Bool
 ```
 that, given a puzzle, checks that all rows, colums and 3x3 blocks do
 not contain the same digit twice.  
@@ -569,7 +569,7 @@ Examples:
 **4.3** Implement a function:
 
 ```haskell
-  update :: Sudoku -> Pos -> Maybe Int -> Puzzle
+  update :: Puzzle -> Pos -> Maybe Int -> Puzzle
 ```
 
 that, given a puzzle, a position, and a new cell value, updates the
