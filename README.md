@@ -12,6 +12,14 @@ material, such as example puzzles in the `puzzles/` directory.
 ```
 $ git clone https://github.com/jimburton/sudoku.git
 ```
+When you first load `Sudoku.hs` in `ghci` you may get an error about
+a missing module, `Data.List.Split`. If so, you need to install the
+module using `cabal`, the package management tool:
+
+```
+$ cabal update
+$ cabal install split
+```
 
 ## Hints
 
