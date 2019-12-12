@@ -17,7 +17,7 @@ cabal-version:       >=1.10
 
 executable sudoku
   main-is:             Main.hs
-  -- other-modules:       
+  other-modules:       Sudoku       
   -- other-extensions:    
   build-depends:       base
                      , split 
