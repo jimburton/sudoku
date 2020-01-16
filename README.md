@@ -11,15 +11,38 @@ material, such as example puzzles in the `puzzles/` directory.
 
 ```
 $ git clone https://github.com/jimburton/sudoku.git
+$ cd sudoku
+sudoku$ 
 ```
-When you first load `Sudoku.hs` in `ghci` you may get an error about
-a missing module, `Data.List.Split`. If so, you need to install the
-module using `cabal`, the package management tool:
+This is a Cabal project. Use `cabal` to compile the code and run the tests:
 
 ```
-$ cabal update
-$ cabal install split
+sudoku$ cabal configure
+sudoku$ cabal run test-sudoku
+--- output of tests
 ```
+
+While you are making changes to `Sudoku.hs` you should also use
+`cabal` to enter the REPL:
+
+```
+sudoku$ cabal repl
+Resolving dependencies...
+Build profile: -w ghc-8.0.2 -O1
+In order, the following will be built (use -v for more details):
+ - sudoku-0.2.0.0 (exe:sudoku) (first run)
+Configuring executable 'sudoku' for sudoku-0.2.0.0..
+Preprocessing executable 'sudoku' for sudoku-0.2.0.0..
+GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
+[1 of 2] Compiling Sudoku           ( src/Sudoku.hs, interpreted )
+[2 of 2] Compiling Main             ( src/Main.hs, interpreted )
+Ok, modules loaded: Main, Sudoku.
+*Sudoku> 
+```
+
+From there you can enter the names of the functions you are working on, experimenting
+with different inputs and so on. When you think they are working as they should, run
+the tests again.
 
 ## Hints
 
@@ -215,14 +238,6 @@ For example, the above Sudoku puzzle has the following representation in Haskell
 Now, a number of assignments follow, leading you step-by-step
 towards an implementation of a Sudoku-solver.
 
-`QuickCheck` tests are defined in `Sudoku.hs` to help you to check
-your work. You can run a test, e.g. `prop_allBlank`, from a `ghci`
-session as follows:
-
-```
-Sudoku> quickCheck prop_allBlank
-```
-
 ## Some Basic Sudoku Functions
 
 To warm up, we start with a number of basic functions on Suduko puzzles.
@@ -240,8 +255,6 @@ that no digits are present).  Do not use copy-and-paste programming
 here. Your definition does not need to be longer than a few short
 lines.
 
-**Test**: `prop_allBlank`.
-
 **1.2** The `Puzzle` type we have defined allows for more things than
 Sudoku puzzles. For example, there is nothing in the type definition that
 says that a puzzle has 9 rows and 9 columns, or that digits need to
@@ -254,8 +267,6 @@ Implement a function
 ```
 
 that checks if all such extra conditions are met by the given puzzle.
-
-**Test**: `prop_isPuzzle` and `prop_isNotPuzzle`.
 
 #### Examples:
 
@@ -474,8 +485,6 @@ that, given a puzzle, creates a list of all blocks of that puzzle. This means:
 + 9 columns,
 + 9 3x3 blocks.
 
-**Test**: `prop_blocks`.
-
 **3.3** Now, implement a function:
 
 ```haskell
@@ -552,8 +561,6 @@ Examples:
   (0,2)
 ```
 
-**Test**: `prop_blank`
-
 **4.2** Implement a function:
 
 ```haskell
@@ -596,8 +603,6 @@ Example:
   .........
   .........
 ```
-
-**Test**: `prop_update`.
 
 **Hints**
 
@@ -733,9 +738,6 @@ using the above idea.
 Unless you’re up for a challenge you are recommended to use the
 skeleton code from above and just fill in the ... parts.
 
-**Test**: `prop_solve`.
-
-
 Examples:
 ```
   Sudoku> printPuzzle (fromJust (solve allBlankPuzzle))
@@ -834,8 +836,6 @@ the property.  You can also generate puzzles with a different
 probability distribution. Try varying the amount of digits in an
 arbitrary puzzle by fiddling with the frequencies in the `cell` function
 and see what happens.
-
-You can compile the code, by using `ghc` instead of `ghci`.
 
 You can make your function solve go faster (see extra assignments *X* and *Y*).
 It is okay if you do not find a completely satisfactory solution to this.
@@ -965,5 +965,6 @@ Can you think of a way to define a function for generating an infinite
 supply of new Sudoku puzzles satisfying the above two properties? You
 should of course make use of the functions you already have.
 
-Do not forget to add appropriate properties that test your functions.
+If you undertake the extensions, be sure to add appropriate properties
+that test your new functions in the test suite, `tests/TestSudoku.hs`.
 
