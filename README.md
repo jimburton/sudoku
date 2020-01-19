@@ -33,7 +33,7 @@ $ cabal repl
 This runs `ghci` with all the right dependencies loaded. Now you can make changes to the
 code in an editor and enter `:r` in the REPL to reload the program and test your work.
 
-**To avoid being accused of plagiarism, do no make your solutions available online. 
+**To avoid being accused of plagiarism, do not make your solutions available online. 
 If you use github or any similar service, make sure the repository is private.**
 
 ## Hints
