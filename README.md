@@ -1,9 +1,9 @@
-# Sudoku lab assignment
+# CI505 Assignment: Sudoku
 
 Adapted with permission from http://www.cse.chalmers.se/edu/course/TDA555.
 
 In this assignment you will design a Haskell program that will be
-able to solve *Sudoku*, the well-known logical puzzle from Japan.
+used to solve *Sudoku*, the well-known logical puzzle from Japan.
 
 First, download a copy of this repository. You will do your work in
 the file `src/Sudoku.hs` and the repository also includes other useful
@@ -12,14 +12,20 @@ material, such as example puzzles in the `puzzles/` directory.
 ```
 $ git clone https://github.com/jimburton/sudoku.git
 ```
-When you first load `Sudoku.hs` in `ghci` you may get an error about
-a missing module, `Data.List.Split`. If so, you need to install the
-module using `cabal`, the package management tool:
+
+The easiest way to experiment with the code whilst you work on it is 
+by running `cabal repl` from the top level of the project:
 
 ```
-$ cabal update
-$ cabal install split
+$ cd sudoku 
+$ cabal repl
 ```
+
+This runs `ghci` with all the right dependencies loaded. Now you can make changes to the
+code in an editor and enter `:r` in the REPL to reload the program and test your work.
+
+**To avoid being accused of plagiarism, do no make your solutions available online. 
+If you use github or any similar service, make sure the repository is private.**
 
 ## Hints
 
