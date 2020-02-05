@@ -27,6 +27,7 @@ executable sudoku
 test-suite test-sudoku
     type:       exitcode-stdio-1.0
     main-is:    TestSudoku.hs
+    other-modules:       Sudoku       
     hs-source-dirs: tests, src
     build-depends: base
                  , split
