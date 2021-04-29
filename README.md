@@ -766,20 +766,20 @@ library `Data.Maybe`.)
 that produces instructions for reading the puzzle from the given file,
 solving it, and printing the answer.
 
-Examples:
+Example:
 ```
-  Sudoku> readAndSolve "../puzzles/example.sud"
-  364871295
-  752936184
-  819254736
-  596713428
-  431582679
-  278469351
-  645328917
-  983147562
-  127695843
-  Sudoku> readAndSolve "impossible.sud"
-  (no solution)
+  readAndSolve "puzzles/easy1.sud" 
+Just (Puzzle [[Just 4,Just 8,Just 3,Just 9,Just 2,Just 1,Just 6,Just 5,Just 7],
+[Just 9,Just 6,Just 7,Just 3,Just 4,Just 5,Just 8,Just 2,Just 1],
+[Just 2,Just 5,Just 1,Just 8,Just 7,Just 6,Just 4,Just 9,Just 3],
+[Just 5,Just 4,Just 8,Just 1,Just 3,Just 2,Just 9,Just 7,Just 6],
+[Just 7,Just 2,Just 9,Just 5,Just 6,Just 4,Just 1,Just 3,Just 8],
+[Just 1,Just 3,Just 6,Just 7,Just 9,Just 8,Just 2,Just 4,Just 5],
+[Just 3,Just 7,Just 2,Just 6,Just 8,Just 9,Just 5,Just 1,Just 4],
+[Just 8,Just 1,Just 4,Just 2,Just 5,Just 3,Just 7,Just 6,Just 9],
+[Just 6,Just 9,Just 5,Just 4,Just 1,Just 7,Just 3,Just 8,Just 2]])
+  Sudoku> readAndSolve "puzzles/impossible.sud"
+Nothing
 ```
 
 **5.3** Implement a function:

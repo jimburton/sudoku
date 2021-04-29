@@ -42,42 +42,42 @@ prop_allBlank = let rs = rows allBlankPuzzle
                  && and (concatMap (map isNothing) rs)
 
 prop_isPuzzle :: Puzzle -> Bool
-prop_isPuzzle s = isPuzzle s
+prop_isPuzzle = isPuzzle
 
 prop_isNotPuzzle :: Bool
 prop_isNotPuzzle = not $ isPuzzle (Puzzle [[]])
 
 prop_blocks :: Puzzle -> Bool
-prop_blocks s = (length bl == 3*9) && 
+prop_blocks p = (length bl == 3*9) && 
                 and [length b == 9 | b <- bl]
-  where bl = blocks s
+  where bl = blocks p
 
 prop_isValidPuzzle :: Puzzle -> Bool
-prop_isValidPuzzle s = isValidPuzzle s || not (null bads)
-  where bads = filter (not . isValidBlock) (blocks s)
+prop_isValidPuzzle p = isValidPuzzle p || not (null bads)
+  where bads = filter (not . isValidBlock) (blocks p)
 
 prop_blank :: Puzzle -> Bool
-prop_blank s = let rs        = rows s
-                   Pos (x,y) = blank s
+prop_blank p = let rs        = rows p
+                   Pos (x,y) = blank p
                in isNothing ((rs !! x) !! y)
                 
 prop_listReplaceOp :: [Int] -> (Int, Int) -> Bool
-prop_listReplaceOp s (i,x) = length s == length (s !!= (i, x))
+prop_listReplaceOp p (i,x) = length p == length (p !!= (i, x))
 
 prop_update :: Puzzle -> Pos -> Maybe Int -> Bool
-prop_update s p m = let Pos (r,c) = p
-                        s' = update s p m
-                        rs = rows s'
+prop_update p pos m = let Pos (r,c) = pos
+                          s'        = update p pos m
+                          rs        = rows s'
                     in
                      (rs !! r) !! c == m
 
 -- run with fewerCheck if you
 -- do not like to wait...
 prop_solve :: Puzzle -> Bool
-prop_solve s 
+prop_solve p 
     | isNothing solution  = True
-    | otherwise           = isSolutionOf (fromJust solution) s
-  where solution = solve s
+    | otherwise           = isSolutionOf (fromJust solution) p
+  where solution = solve p
 
 fewerCheck prop = quickCheckWith (stdArgs{ maxSuccess = 30 })  prop
 
