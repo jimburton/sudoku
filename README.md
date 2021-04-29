@@ -753,7 +753,8 @@ Examples:
   372689514
   814253769
   695417382
-  Sudoku> do s <- readPuzzle "puzzles/impossible.sud"; print (solve sud)
+  Sudoku> s <- readPuzzle "puzzles/impossible.sud"
+  Sudoku> print (solve sud)
   Nothing
 ```
 (In the above examples, we use the standard function `fromJust` from the
