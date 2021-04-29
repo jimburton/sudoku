@@ -371,7 +371,7 @@ representation of a puzzle.
 Examples:
 
 ```
-  Sudoku> s <- readPuzzle "../puzzles/example.sud"
+  Sudoku> s <- readPuzzle "puzzles/example.sud"
   Sudoku> printPuzzle s
   36..712..
   .5....18.
@@ -742,17 +742,18 @@ Examples:
   531642978
   642978531
   978531642
-  Sudoku> do s <- readPuzzle "example.sud"; printPuzzle (fromJust (solve s))
-  364871295
-  752936184
-  819254736
-  596713428
-  431582679
-  278469351
-  645328917
-  983147562
-  127695843
-  Sudoku> do s <- readPuzzle "../puzzles/impossible.sud"; print (solve sud)
+  Sudoku> s <- readPuzzle "puzzles/easy1.sud"
+  Sudoku> printPuzzle (fromJust (solve s))
+  483921657
+  967345821
+  251876493
+  548132976
+  729564138
+  136798245
+  372689514
+  814253769
+  695417382
+  Sudoku> do s <- readPuzzle "puzzles/impossible.sud"; print (solve sud)
   Nothing
 ```
 (In the above examples, we use the standard function `fromJust` from the
