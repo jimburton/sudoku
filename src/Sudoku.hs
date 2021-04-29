@@ -117,7 +117,7 @@ solve = undefined
 
 {-| Ex 5.2
 
-    Read a puzzle and solve it. |-}
+    Read a puzzle and return the solution, if it exists. |-}
 readAndSolve :: FilePath -> IO (Maybe Puzzle)
 readAndSolve = undefined
 

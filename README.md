@@ -760,11 +760,11 @@ library `Data.Maybe`.)
 
 **5.2** For your own convenience, define a function:
 ```haskell
-  readAndSolve :: FilePath -> IO ()
+  readAndSolve :: FilePath -> IO (Maybe Puzzle)
 ```
 
-that produces instructions for reading the puzzle from the given file,
-solving it, and printing the answer.
+that reads a puzzle from the given file,
+tries to solve it, and returns the solution if it exists.
 
 Example:
 ```
