@@ -8,27 +8,25 @@ import Test.Framework.Providers.QuickCheck2
 
 import Sudoku
 
--------------------------------------------------------------------------
--- QuickCheck tests:
---
--- Run these using cabal, as
---
--- sudoku$ cabal run test-sudoku
---
---
--------------------------------------------------------------------------
+-- * QuickCheck tests:
 
--- cell generates an arbitrary cell in a Puzzle
+-- | Run these using cabal, as
+-- |
+-- | $ cabal run test-sudoku
+-- |
+
+-- | Generates an arbitrary cell in a Puzzle.
 cell :: Gen (Maybe Int)
 cell = frequency [ (9, return Nothing)
                  , (1, do n <- choose(1,9) ; return (Just n))]
 
--- an instance for generating Arbitrary Puzzles
+-- | An instance for generating arbitrary Puzzles.
 instance Arbitrary Puzzle where
   arbitrary =
     do rows <- sequence [ sequence [ cell | j <- [1..9] ] | i <- [1..9] ]
        return (Puzzle rows)
 
+-- | An instance for generating arbitrary Pos values.
 instance Arbitrary Pos where
   arbitrary = do r <- choose (0,8)
                  c <- choose (0,8)
@@ -92,7 +90,7 @@ tests = [ testProperty "Check that allBlankPuzzle produces a blank puzzle"      
         , testProperty "Check that all blocks in a puzzle are valid."                      prop_isValidPuzzle
         , testProperty "Check that the blank function can find blank cells."               prop_blank
         , testProperty "Check that the replace operator really replaces values in a cell." prop_listReplaceOp
-        , testProperty "Check that puzzles can be updated. "                               prop_update
+        , testProperty "Check that puzzles can be updated."                                prop_update
         , testProperty "Check that puzzles can be solved."                                 prop_solve
         ]
 
