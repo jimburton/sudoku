@@ -1,9 +1,9 @@
-# Sudoku lab assignment
+# CI505 Assignment: Sudoku
 
 Adapted with permission from http://www.cse.chalmers.se/edu/course/TDA555.
 
 In this assignment you will design a Haskell program that will be
-able to solve *Sudoku*, the well-known logical puzzle from Japan.
+used to solve *Sudoku*, the well-known logical puzzle from Japan.
 
 First, download a copy of this repository. You will do your work in
 the file `src/Sudoku.hs` and the repository also includes other useful
@@ -17,36 +17,27 @@ sudoku$
 This is a Cabal project. Use `cabal` to compile the code and run the tests:
 
 ```
-sudoku$ cabal configure
 sudoku$ cabal run test-sudoku
 --- output of tests
 ```
 
-While you are making changes to `Sudoku.hs` you should also use
-`cabal` to enter the REPL:
+The easiest way to experiment with the code whilst you work on it is 
+by running `cabal repl` from the top level of the project:
 
 ```
-sudoku$ cabal repl
-Resolving dependencies...
-Build profile: -w ghc-8.0.2 -O1
-In order, the following will be built (use -v for more details):
- - sudoku-0.2.0.0 (exe:sudoku) (first run)
-Configuring executable 'sudoku' for sudoku-0.2.0.0..
-Preprocessing executable 'sudoku' for sudoku-0.2.0.0..
-GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
-[1 of 2] Compiling Sudoku           ( src/Sudoku.hs, interpreted )
-[2 of 2] Compiling Main             ( src/Main.hs, interpreted )
-Ok, modules loaded: Main, Sudoku.
-*Sudoku> 
+$ cd sudoku 
+$ cabal repl
 ```
 
-From there you can enter the names of the functions you are working on, experimenting
-with different inputs and so on. When you think they are working as they should, run
-the tests again.
+This runs `ghci` with all the right dependencies loaded. Now you can make changes to the
+code in an editor and enter `:r` in the REPL to reload the program and test your work.
+
+**To avoid being accused of plagiarism, do not make your solutions available online. 
+If you use github or any similar service, make sure the repository is private.**
 
 ## Hints
 
-Some assignments have **hints**. Often, these involve particular standard
+Each exercise has **hints**. Often, these involve particular standard
 Haskell functions that you could use. Some of these functions are
 defined in modules that you have to import yourself explicitly. You
 can use the following resources to find more information about those
@@ -57,8 +48,8 @@ functions:
 + [A Tour of the Haskell Prelude](http://undergraduate.csse.uwa.edu.au/units/CITS3211/lectureNotes/tourofprelude.html): shows all standard Haskell functions
 that you get without importing any module.
 
-We encourage you to go and find information about the functions that
-are mentioned in the hints.
+You are encouraged to find information about functions mentioned in
+the hints.
 
 ## Preparation
 
@@ -83,22 +74,22 @@ list comprehension:
 To operate on the columns instead, use the function
 
 ```haskell
-transpose :: [[a]] -> [[a]]  -- import Data.List
+transpose :: [[a]] -> [[a]]  -- import Data.List to use it
 ```
 to turn the list of rows into a list of columns.
 
-An alternative to list comprehension is to use the higher-order function
+An alternative to list comprehension is to use `map`
 
 ```haskell
 map :: (a -> b) -> [a] -> [b]
 ```
 
 There are two ways to check that all elements in a puzzle satisfy some property:
-Use list comprehension and one of the functions
+Use a list comprehension and one of the functions
 
 ```haskell
-and :: [Bool] -> Bool  -- All elements are true?
-or  :: [Bool] -> Bool  -- Some element is true?
+and :: [Bool] -> Bool  -- True if all elements in the list are true.
+or  :: [Bool] -> Bool  -- True if any element is true.
 ```
 
 Use one of the higher-order functions
@@ -108,7 +99,7 @@ all :: (a -> Bool) -> [a] -> Bool  -- All elements satisfy the property?
 any :: (a -> Bool) -> [a] -> Bool  -- Some element satisfies the property?
 ```
 
-Try to minimize the use of IO instructions and do as much work as
+You should minimize the use of IO actions and do as much work as
 possible using pure functions. For example, this program
 
 ```haskell
@@ -160,7 +151,6 @@ Here is an example of a Sudoku puzzle:
 
 ```
 
-
 And here is the solution:
 
 ```
@@ -197,10 +187,11 @@ solve it. If you want to read more about Sudoku, here are a few links:
 
 To implement a Sudoku-solving program, we need to come up with a way
 of modelling Sudoku puzzles. A Sudoku puzzle is a matrix of digits or
-blanks. The natural way of modelling a matrix is as a list of
-lists. The outer list represents all the rows, and the elements of the
-list are the elements of each row. Digits or blanks can be represented
-by using the Haskell `Maybe` type. Digits are simply represented by `Int`.
+blanks. A straightforward (although not very efficient) way of
+modelling a matrix is as a list of lists. The outer list represents
+all the rows, and the elements of the list are the elements of each
+row. Digits or blanks can be represented by using the Haskell `Maybe`
+type. Digits are simply represented by `Int`.
 
 Summing up, a natural way to represent Sudoku puzzles is using the following
 Haskell datatype:
@@ -210,7 +201,7 @@ Haskell datatype:
 ```
 
 Since it is convenient to have a function that extracts the actual
-rows from the puzzle, we say:
+rows from the puzzle, we provide one:
 
 ```haskell
   rows :: Puzzle -> [[Maybe Int]]
@@ -220,23 +211,20 @@ rows from the puzzle, we say:
 For example, the above Sudoku puzzle has the following representation in Haskell:
 
 ```haskell
-  example :: Puzzle
-  example =
     Puzzle
-      [ [Just 3, Just 6, Nothing,Nothing,Just 7, Just 1, Just 2, Nothing,Nothing]
-      , [Nothing,Just 5, Nothing,Nothing,Nothing,Nothing,Just 1, Just 8, Nothing]
-      , [Nothing,Nothing,Just 9, Just 2, Nothing,Just 4, Just 7, Nothing,Nothing]
-      , [Nothing,Nothing,Nothing,Nothing,Just 1, Just 3, Nothing,Just 2, Just 8]
-      , [Just 4, Nothing,Nothing,Just 5, Nothing,Just 2, Nothing,Nothing,Just 9]
-      , [Just 2, Just 7, Nothing,Just 4, Just 6, Nothing,Nothing,Nothing,Nothing]
-      , [Nothing,Nothing,Just 5, Just 3, Nothing,Just 8, Just 9, Nothing,Nothing]
-      , [Nothing,Just 8, Just 3, Nothing,Nothing,Nothing,Nothing,Just 6, Nothing]
-      , [Nothing,Nothing,Just 7, Just 6, Just 9, Nothing,Nothing,Just 4, Just 3]
-      ]
+      [ [Nothing, Nothing, Just 1, Nothing, Nothing, Nothing, Just 7, Just 5, Nothing]
+	  , [Nothing, Just 8, Nothing, Nothing, Just 2, Nothing, Nothing, Nothing, Nothing]
+	  , [Nothing, Just 3, Just 6, Nothing, Just 4, Nothing, Nothing, Just 8, Nothing]
+	  , [Nothing, Nothing, Nothing, Just 6, Nothing, Just 1, Just 2, Just 4, Nothing]
+	  , [Just 7, Nothing, Just 4, Nothing, Just 5, Nothing, Just 6, Nothing, Just 8]
+	  , [Nothing, Just 6, Nothing, Just 8, Nothing, Just 3, Nothing, Just 7, Just 4]
+	  , [Nothing, Nothing, Nothing, Just 1, Nothing, Nothing, Nothing, Just 3, Nothing]
+	  , [Just 8, Nothing, Just 2, Nothing, Nothing, Nothing, Just 3, Nothing, Just 6]
+	  , [Nothing, Nothing, Just 7, Just 4, Nothing, Nothing, Just 8, Nothing, Just 1]
 ```
 
-Now, a number of assignments follow, leading you step-by-step
-towards an implementation of a Sudoku-solver.
+A number of exercises follow, leading you step-by-step towards an
+implementation of a Sudoku-solver.
 
 ## Some Basic Sudoku Functions
 
@@ -246,7 +234,7 @@ To warm up, we start with a number of basic functions on Suduko puzzles.
 
 **1.1** Implement a function
 
-```haskell  
+```haskell
   allBlankPuzzle :: Puzzle
 ```
 
@@ -256,9 +244,10 @@ here. Your definition does not need to be longer than a few short
 lines.
 
 **1.2** The `Puzzle` type we have defined allows for more things than
-Sudoku puzzles. For example, there is nothing in the type definition that
-says that a puzzle has 9 rows and 9 columns, or that digits need to
-lie between 1 and 9. 
+Sudoku puzzles. Our constraints are that:
+
+. each puzzle has 9 rows and 9 columns, and
+. digits lie between 1 and 9. 
 
 Implement a function
 
@@ -266,7 +255,7 @@ Implement a function
   isPuzzle :: Puzzle -> Bool
 ```
 
-that checks if all such extra conditions are met by the given puzzle.
+that checks if the constraints are satisfied.
 
 #### Examples:
 
@@ -292,7 +281,7 @@ no blank cells left. Implement the following function:
 Note that we do not check here if the puzzle is a valid solution; we
 will do this later. This means that any puzzle without blanks (even
 puzzles with the same digit appearing twice in a row) is considered
-solved by this function.  
+solved by this function.
 
 **Hints**
 
@@ -313,7 +302,7 @@ way, our program can read puzzles from a file, and it is easy for us
 to create and store several Sudoku puzzles.
 
 The following is an example text-representation that we will use in
-this assignment. It actually represents the example above.
+this assignment (it actually represents the example given above).
 
 ```
 36..712..
@@ -335,11 +324,10 @@ filled cell, and a full stop (.) represents a blank cell.
 
 **2.1** Implement a function:
 
-```haskell  
+```haskell
   printPuzzle :: Puzzle -> IO ()
 ```
-that, given a puzzle, creates instructions to print the Sudoku on the
-screen, using the format shown above.  
+that, given a puzzle, prints it on the screen using the format shown above.
 
 Example:
 ```
@@ -371,15 +359,14 @@ Example:
   readPuzzle :: FilePath -> IO Puzzle
 ```
 
-that, given a filename, creates instructions that read the puzzle from
-the file, and deliver it as the result of the instructions. You may
-decide yourself what to do when the file does not contain a
-representation of a puzzle.  
+that, given a filename, reads the file and parses its contents as a
+`Puzzle`. You may decide yourself what to do when the file does not
+contain a representation of a puzzle.
 
 Examples:
 
 ```
-  Sudoku> s <- readPuzzle "../puzzles/example.sud"
+  Sudoku> s <- readPuzzle "puzzles/example.sud"
   Sudoku> printPuzzle s
   36..712..
   .5....18.
@@ -401,14 +388,14 @@ of IO instructions, just like in do notation: `s <- readPuzzle ...`)
 **Hints**
 
 To implement the above, you will need to be able to convert between
-characters (type `Char`) and digits/integers (type `Int`). The standard
-functions `chr` and `ord` (import the module `Data.Char`) will come in handy
-here. Think about the following problems:
+characters (type `Char`) and digits/integers (type `Int`). The
+standard functions `chr` and `ord` (import the module `Data.Char` to
+use them) will come in handy here. Think about the following problems:
 
 + Given a character representing a digit, for example `‘3’ :: Char`, how
-do you compute the integer value `3`?
+  do you compute the integer value `3`?
 + Given a digit represented as an integer, for example `3 :: Int`, how do
-you compute the character `‘3’`?
+  you compute the character `‘3’`?
 
 The constant value ord ‘0’ will play a central role in all this. You
 can also use the function `digitToInt`.
@@ -429,12 +416,10 @@ lines      :: String -> [String]
 This repository contains some example Sudoku files that you can
 download and use in the `puzzles/` directory. There are easy and hard
 examples. The easy ones should all be solvable by your final program
-within minutes; the hard ones will probably take a very long time
-(unless you do the extra assignments and optimise your solver).
+within minutes at most; the hard ones will take a longer time (unless
+you do the extra assignments and optimise your solver).
  
-
 #### Rows, Columns and Blocks
-
 
 Now, we are going to think about what actually constitutes a valid
 solution of a puzzle. There are three constraints that a valid
@@ -451,9 +436,9 @@ a column or a 3x3 block. A block therefore contains 9 cells:
   type Block = [Maybe Int]
 ```
 
-We are going to define a function that checks if a puzzle is not
-violating any of the above constraints, by checking that none of the
-blocks violate those constraints.
+We are going to define a function that checks if a puzzle satisfies
+the above constraints, by checking that each of the blocks satisfies
+the constraints.
 
 ## Part 3
 
@@ -491,7 +476,7 @@ that, given a puzzle, creates a list of all blocks of that puzzle. This means:
   isValidPuzzle :: Puzzle -> Bool
 ```
 that, given a puzzle, checks that all rows, colums and 3x3 blocks do
-not contain the same digit twice.  
+not contain the same digit twice.
 
 Examples:
 
@@ -520,10 +505,10 @@ Note that some of the above functions only appear when you import
 
 ### Positions and Finding Blanks
 
-We are getting closer to the final solving function. Let us start
+We are getting closer to the final solving function. Let's start
 thinking about how such a function would work.
 
-Given a puzzle, if there are no blanks left in the Sudoku, we are
+Given a puzzle, if there are no blanks left in the Sudoku we are
 done. Otherwise, there is at least one blank cell that needs to be
 filled in somehow. We are going to write functions to find and
 manipulate such a blank cell.
@@ -536,11 +521,12 @@ modelling coordinates:
   data Pos = Pos (Int,Int)
 ```
 
-We use positions as indicating first the row and then the column. It
-is common in programming languages to start counting at 0. Therefore,
-the position that indicates the upper left corner is (0,0), and the
-position indicating the lower right corner is (8,8). And, for example,
-the position (3,5) denotes the 6th cell in the 4th row.
+We use positions as indicating first the *row* and then the
+*column*. As usual when programming, we start counting
+at 0. So, the position that indicates the upper left corner is
+(0,0), and the position indicating the lower right corner is
+(8,8). And, for example, the position (3,5) denotes the 6th cell in
+the 4th row.
 
 ## Part 4
 
@@ -610,7 +596,7 @@ There is a standard function `(!!)` in Haskell for getting a specific
 element from a list. It starts indexing at 0, so for example to get
 the first element from a list `xs`, you can use `xs !! 0`.
 
-We usually use the standard function zip to pair up elements in a list
+We usually use the standard function `zip` to pair up elements in a list
 with their corresponding index. Example:
 
 ```
@@ -629,13 +615,10 @@ head :: [a] -> a
 zip  :: [a] -> [b] -> [(a,b)]
 ```
 
-You might want to take a look at the exercises and answers on lists
-and list comprehensions.
-
 ## Solving puzzles
 
-Finally, we have all the bits in place to attack our main problem:
-Solving a given puzzle.
+Finally, we have everything in place to attack our main problem:
+solving puzzles.
 
 Our objective is to define a Haskell function
 
@@ -643,40 +626,40 @@ Our objective is to define a Haskell function
   solve :: Puzzle -> Maybe Puzzle
 ```
 
-The idea is as follows. If we have a puzzle `s` that we would like to
-solve, we give it to the function solve. This will produce one of two
+The idea is as follows. If we have a puzzle `p` that we would like to
+solve, we give it to the function `solve`. This will produce one of two
 results: 
 
 `Nothing`, in which case it was impossible to solve the
-puzzle. There is no solution.  
+puzzle. There is no solution.
 
-`Just s’`, in which case `s’` is a puzzle that represents a
-solution. In other words, `s’` 
+`Just p’`, in which case `p’` is a puzzle that represents a
+solution. In other words, `p’` 
 
 1. contains no blanks, 
 2. has no blocks (rows, columns, 3x3 blocks) that contain the same digit twice,
 and 
 3. is an extension of the original puzzle (meaning that none of
-the original digits have changed).  
+the original digits have changed).
 
 How should `solve` be implemented? Here is one idea. When we try to
-solve a given puzzle `s`, there exist three cases: 
+solve a given puzzle `p`, there exist three cases: 
 
-`s` violates some of the constraints (in other words: some of its blocks contain the
+`p` violates some of the constraints (in other words: some of its blocks contain the
 same digit twice). In this case, the answer of `solve` must be `Nothing`.
 
-`s` does not contain any blanks (in other words: `s` is a
-solution). In this case, the answer of `solve` must be `Just s`.
+`p` does not contain any blanks (in other words: `p` is a
+solution). In this case, the answer of `solve` must be `Just p`.
 
-Otherwise, `s` must contain at least one blank cell. In this case, we
-try to recursively solve `s` 9 times; each time we update the blank
-cell with a concrete digit from 1 to 9. The first recursive attempt
-that succeeds is our answer. If none of the recursive attempts
-succeed, we return `Nothing`.  This method of problem solving is called
-backtracking.
+Otherwise, `p` must contain at least one blank cell. In this case, we
+try to recursively solve `p` 9 times; each time we update the blank
+cell with one of the digits from 1 to 9 and pass the new puzzle to
+`solve` again. The first recursive attempt that succeeds is our
+answer. If none of the recursive attempts succeed, we return
+`Nothing`.  This method of problem solving is called *backtracking*.
 
 Since backtracking is not covered in the module, we provide you with a
-skeleton implementation of the solver. If you want more challenge,
+skeleton implementation of the solver. If you want more of a challenge,
 don’t look at the code provided here.
 
 The solver is a function
@@ -693,19 +676,20 @@ above:
 
 ```haskell
 solve :: Puzzle -> Maybe Puzzle
-solve s | ...       = Nothing  -- There's a violation in s
-        | ...       = Just s   -- s is already solved
+solve p | ...       = Nothing  -- There's a violation in p
+        | ...       = Just p   -- p is already solved
         | otherwise = pickASolution possibleSolutions
   where
     nineUpdatedSuds   = ... :: [Puzzle]
-    possibleSolutions = [solve s' | s' <- nineUpdatedSuds]
+    possibleSolutions = [solve p' | p' <- nineUpdatedSuds]
 ```
 
 The final case is the tricky one. First, we have the local definition
 `nineUpdatedSuds`, which is a list of nine puzzles. They should all be
-the same as the puzzle `s`, except that the first blank cell should be
-updated from `Nothing` to a numeric value. Since the cell can be updated
-in nine different ways, we get a list of nine new puzzles.
+the same as the puzzle `p`, except that the first blank cell should be
+updated from `Nothing` to `(Just i)`, where `i` is between 1
+and 9. Since the cell can be updated in nine different ways, we get a
+list of nine new puzzles.
 
 By recursively solving these nine puzzles, we get a list of nine
 possible solutions (`possibleSolutions`). Now it’s just the task of the
@@ -750,17 +734,19 @@ Examples:
   531642978
   642978531
   978531642
-  Sudoku> do s <- readPuzzle "example.sud"; printPuzzle (fromJust (solve s))
-  364871295
-  752936184
-  819254736
-  596713428
-  431582679
-  278469351
-  645328917
-  983147562
-  127695843
-  Sudoku> do s <- readPuzzle "../puzzles/impossible.sud"; print (solve sud)
+  Sudoku> s <- readPuzzle "puzzles/easy1.sud"
+  Sudoku> printPuzzle (fromJust (solve s))
+  483921657
+  967345821
+  251876493
+  548132976
+  729564138
+  136798245
+  372689514
+  814253769
+  695417382
+  Sudoku> s <- readPuzzle "puzzles/impossible.sud"
+  Sudoku> print (solve sud)
   Nothing
 ```
 (In the above examples, we use the standard function `fromJust` from the
@@ -768,26 +754,26 @@ library `Data.Maybe`.)
 
 **5.2** For your own convenience, define a function:
 ```haskell
-  readAndSolve :: FilePath -> IO ()
+  readAndSolve :: FilePath -> IO (Maybe Puzzle)
 ```
 
-that produces instructions for reading the puzzle from the given file,
-solving it, and printing the answer.
+that reads a puzzle from the given file,
+tries to solve it, and returns the solution if it exists.
 
-Examples:
+Example:
 ```
-  Sudoku> readAndSolve "../puzzles/example.sud"
-  364871295
-  752936184
-  819254736
-  596713428
-  431582679
-  278469351
-  645328917
-  983147562
-  127695843
-  Sudoku> readAndSolve "impossible.sud"
-  (no solution)
+  readAndSolve "puzzles/easy1.sud" 
+Just (Puzzle [[Just 4,Just 8,Just 3,Just 9,Just 2,Just 1,Just 6,Just 5,Just 7],
+[Just 9,Just 6,Just 7,Just 3,Just 4,Just 5,Just 8,Just 2,Just 1],
+[Just 2,Just 5,Just 1,Just 8,Just 7,Just 6,Just 4,Just 9,Just 3],
+[Just 5,Just 4,Just 8,Just 1,Just 3,Just 2,Just 9,Just 7,Just 6],
+[Just 7,Just 2,Just 9,Just 5,Just 6,Just 4,Just 1,Just 3,Just 8],
+[Just 1,Just 3,Just 6,Just 7,Just 9,Just 8,Just 2,Just 4,Just 5],
+[Just 3,Just 7,Just 2,Just 6,Just 8,Just 9,Just 5,Just 1,Just 4],
+[Just 8,Just 1,Just 4,Just 2,Just 5,Just 3,Just 7,Just 6,Just 9],
+[Just 6,Just 9,Just 5,Just 4,Just 1,Just 7,Just 3,Just 8,Just 2]])
+  Sudoku> readAndSolve "puzzles/impossible.sud"
+Nothing
 ```
 
 **5.3** Implement a function:
@@ -801,6 +787,7 @@ first one is a solution of the second one (i.e. all digits in the
 second puzzle are maintained in the first one).
 
 Examples:
+
 ```
   Sudoku> fromJust (solve allBlankPuzzle) `isSolutionOf` allBlankPuzzle
   True
@@ -812,7 +799,7 @@ Examples:
 
 **Hints**
 
-All the work we did in the assignments 1 to 4 should be used in order
+All the work we did in exercises 1 to 4 should be used in order
 to implement the function solve.
 
 To implement the third, recursive, case of `solve`, you can use a list
@@ -860,17 +847,19 @@ you will learn more if you do them.
 There are no perfect, pre-defined answers here, but try to show your
 thoughts and understanding in your answers.
 
-**X.1** The solving method we have used in this lab assignment is very
-basic, and in some sense naive. One way to boost performance is to
-look closer at the function blank. Perhaps if we picked the blank in a
-smarter way, the solve function would go faster?  One idea is to
-always pick the blank spot where there are as few possibilities
-left. For example, if we have a row with one or two blank spots, it is
-probably a good idea to pick one of those blank spots, since it will
-limit the consecutive search most, and it will lead to search to a
-state with more digits filled in. (Such a way of changing a solving
-method is called a heuristic – there is no absoluate guarantee that
-the search will go faster, but often it actually will.)
+**X.1** The solving method we have used in this assignment is very
+basic, and in some sense naive. The easiest way to boost performance
+is to look closer at the function `blank`. 
+
+Perhaps if we picked the blank in a smarter way, the solve function
+would go faster...one idea is to always pick the blank spot where
+there are the fewest possibilities left. For example, if we have a row
+with one or two blank spots, it is probably a good idea to pick one of
+those blank spots, since it will limit the consecutive search most,
+and it will lead to search to a state with more digits filled
+in. (Such a way of changing a solving method is called a heuristic –
+there is no absoluate guarantee that the search will go faster, but
+often it actually will.)
 
 Change the implementation of the blank function, so that it always
 picks the blank spot that is in a row, column, or 3x3 block where
@@ -903,14 +892,14 @@ hard puzzles now?
 
 Do not forget to add appropriate properties that test your functions.
 
-**X.2** The solving method we have used in this lab assignment is very
-basic, and in some sense naive. The best known methods to solve
-problems like Sudoku is to also include the notion of
-propagation. This is the way most humans actually solve a puzzle.
+**X.2** The best known methods to solve problems like Sudoku is to
+also include the notion of *propagation*. This is the way most humans
+actually solve a puzzle.
 
 A simple variant of propagation is the following. Suppose we have
 a puzzle containing a row with precisely one blank, such as the 3rd row in the
 example below:
+
 ```
   36..712..
   .5....18.
@@ -953,13 +942,13 @@ example, one could have a function
 ```
 
 that every time we run it, would print a new, interesting Sudoku
-puzzle on the screen.  One can discuss what an interesting Sudoku
+puzzle on the screen.  One can discuss what an "interesting" Sudoku
 puzzle is. Here are three properties that an interesting Sudoku puzzle
 must have:
 
-+ There must be a solution
-+ There must not be two different solutions
-+ There must not be too many digits already visible
++ There must be a solution.
++ There must not be two different solutions.
++ There must not be too many digits already visible.
 
 Can you think of a way to define a function for generating an infinite
 supply of new Sudoku puzzles satisfying the above two properties? You
@@ -967,4 +956,3 @@ should of course make use of the functions you already have.
 
 If you undertake the extensions, be sure to add appropriate properties
 that test your new functions in the test suite, `tests/TestSudoku.hs`.
-
