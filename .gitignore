@@ -21,3 +21,5 @@ cabal.project.local
 cabal.project.local~
 .HTF/
 .ghc.environment.*
+/cabal.project.local~0
+/cabal.project.local~1
