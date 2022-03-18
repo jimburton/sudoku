@@ -376,7 +376,7 @@ representation of a puzzle.
 Examples:
 
 ```
-  Sudoku> s <- readPuzzle "../puzzles/example.sud"
+  Sudoku> s <- readPuzzle "./puzzles/example.sud"
   Sudoku> printPuzzle s
   36..712..
   .5....18.
