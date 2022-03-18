@@ -757,7 +757,7 @@ Examples:
   645328917
   983147562
   127695843
-  Sudoku> do s <- readPuzzle "../puzzles/impossible.sud"; print (solve sud)
+  Sudoku> do s <- readPuzzle "./puzzles/impossible.sud"; print (solve sud)
   Nothing
 ```
 (In the above examples, we use the standard function `fromJust` from the
@@ -773,7 +773,7 @@ solving it, and printing the answer.
 
 Examples:
 ```
-  Sudoku> readAndSolve "../puzzles/example.sud"
+  Sudoku> readAndSolve "./puzzles/example.sud"
   364871295
   752936184
   819254736
@@ -783,7 +783,7 @@ Examples:
   645328917
   983147562
   127695843
-  Sudoku> readAndSolve "impossible.sud"
+  Sudoku> readAndSolve "./puzzles/impossible.sud"
   (no solution)
 ```
 
