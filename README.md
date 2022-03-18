@@ -305,15 +305,15 @@ The following is an example text-representation that we will use in
 this assignment (it actually represents the example given above).
 
 ```
-36..712..
-.5....18.
-..92.47..
-....13.28
-4..5.2..9
-27.46....
-..53.89..
-.83....6.
-..769..43
+..1...75.
+.8..2....
+.36.4..8.
+...6.124.
+7.4.5.6.8
+.6.8.3.74
+...1...3.
+8.2...3.6
+..74..8.1
 ```
 
 There are 9 lines of text in this representation, each corresponding
