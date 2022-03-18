@@ -21,4 +21,9 @@ cabal.project.local
 cabal.project.local~
 .HTF/
 .ghc.environment.*
+<<<<<<< HEAD
 *.tix
+=======
+cabal.project*
+*/#*
+>>>>>>> 3e67f246013bd19f734992b71f9abcda219a9dec
