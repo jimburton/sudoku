@@ -1,6 +1,6 @@
-module Main 
+module Main (main) 
     where
-import Sudoku
+import Sudoku ( printPuzzle, readAndSolve )
 
 main :: IO ()
 main = do s <- readAndSolve "../puzzles/easy10.sud"

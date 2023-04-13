@@ -27,3 +27,4 @@ cabal.project.local~
 cabal.project*
 */#*
 >>>>>>> 3e67f246013bd19f734992b71f9abcda219a9dec
+*.~undo-tree~
